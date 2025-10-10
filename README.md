@@ -7,4 +7,4 @@ this bypass is kind of a combination of Phantom v2 and WINE, where it takes adva
 
 ### Nerd stuff:
 
-* Essentially, you load up the website with internet connected, it gets disguised as Google so you can do this in class, then it caches the games themselves with a serviceworker, then you can disable internet so Securly can't see your screen, then go ahead and play those cached games.
+* Essentially, you load up the website with internet connected, it gets disguised as Google so you can do this in class, then it caches the games themselves with a serviceworker, now you can disable internet so Securly can't see your screen, after that you can go ahead and play those cached games.
