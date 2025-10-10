@@ -6,18 +6,30 @@ const URLS_TO_CACHE = [
   './games/poorbunny.html'
 ];
 
+// install event
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE_NAME).then(c => c.addAll(URLS_TO_CACHE))
+    // delete old caches first
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cache => caches.delete(cache))
+      );
+    }).then(() => {
+      // then open new cache and add files
+      return caches.open(CACHE_NAME).then(c => c.addAll(URLS_TO_CACHE));
+    })
   );
-  self.skipWaiting();
+  self.skipWaiting(); // activate new SW immediately
 });
 
+// activate event
+self.addEventListener('activate', e => {
+  e.waitUntil(self.clients.claim());
+});
+
+// fetch event
 self.addEventListener('fetch', e => {
   e.respondWith(
     caches.match(e.request).then(r => r || fetch(e.request))
   );
 });
-
-
-
