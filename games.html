@@ -1,34 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Offline Games</title>
-  <style>
-    body {
-      background: #121212;
-      color: #fff;
-      font-family: "Segoe UI", sans-serif;
-      text-align: center;
-      padding-top: 10vh;
-    }
-    h1 { font-size: 2.2em; }
-    a {
-      display: inline-block;
-      margin: 15px;
-      padding: 10px 20px;
-      background: #1f1f1f;
-      color: #0bf;
-      border-radius: 10px;
-      text-decoration: none;
-      transition: background .3s;
-    }
-    a:hover { background: #333; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Offline Game Launcher</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+body{background:#0b0b0b;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px;}
+header{width:100%;text-align:center;margin-bottom:20px;}
+header h1{font-size:3em;color:#0bf;text-shadow:0 0 10px #0bfaa,0 0 20px #0bf55;}
+header p.subtitle{font-size:1.2em;color:#aaa;margin-bottom:20px;}
+
+#gamesContainer{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px;width:100%;max-width:1200px;margin-bottom:30px;}
+.game-card{background:#1c1c1c;border-radius:15px;overflow:hidden;text-decoration:none;color:#fff;display:flex;flex-direction:column;transition:transform 0.3s ease,box-shadow 0.3s ease;box-shadow:0 6px 15px rgba(0,0,0,0.5);}
+.game-card:hover{transform:translateY(-5px) scale(1.05);box-shadow:0 15px 30px rgba(0,0,0,0.7);}
+.game-logo{width:100%;aspect-ratio:1/1;object-fit:cover;}
+.game-title{padding:10px;font-size:1em;text-align:center;background:#151515;transition:background 0.3s ease;}
+.game-card:hover .game-title{background:#0a0a0a;}
+
+/* game display area */
+#gameArea{width:100%;max-width:1200px;height:600px;background:#0b0b0b;border-radius:20px;overflow:hidden;display:none;position:relative;flex-direction:column;box-shadow:0 10px 40px rgba(0,0,0,0.7);}
+#gameViewer{width:100%;height:100%;border:none;}
+#gameControls{position:absolute;top:15px;right:15px;display:flex;gap:10px;z-index:10;}
+.control-btn{padding:8px 15px;border:none;border-radius:10px;font-weight:bold;cursor:pointer;background:linear-gradient(145deg,#00bfff,#0fffc3);color:#000;box-shadow:0 5px 15px rgba(0,0,0,0.5);transition:all 0.3s ease;}
+.control-btn:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(0,0,0,0.7);background:linear-gradient(145deg,#0fffc3,#00bfff);}
+#gameTitleBar{width:100%;padding:15px;text-align:center;background:rgba(10,10,10,0.85);backdrop-filter:blur(6px);position:relative;font-size:1.5em;letter-spacing:1px;text-shadow:0 0 10px #0bf;}
+
+@media(max-width:900px){#gameArea{height:500px;}#gameTitleBar{font-size:1.2em;}}
+@media(max-width:500px){.control-btn{padding:6px 10px;font-size:0.9em;}}
+</style>
 </head>
 <body>
-  <h1>🎯 Offline Games</h1>
-  <p>no internet? no problem 😎</p>
-  <a href="games/cubedodge.html">🟥 Play Cube Dodge</a>
+
+<header>
+  <h1>Offline Games</h1>
+  <p class="subtitle">Select a game to play</p>
+</header>
+
+<div id="gamesContainer"></div>
+
+<div id="gameArea">
+  <iframe id="gameViewer" src=""></iframe>
+  <div id="gameControls">
+    <button id="fullscreenBtn" class="control-btn">Fullscreen</button>
+    <button id="reloadBtn" class="control-btn">Reload</button>
+    <button id="closeBtn" class="control-btn">Close</button>
+  </div>
+  <div id="gameTitleBar">Game Title</div>
+</div>
+
+<footer style="margin-top:auto;color:#555;">Made with 💙 for offline fun</footer>
+
+<script>
+const games=[
+  {file:'poorbunny.html',name:'Poor Bunny'},
+  {file:'snake.html',name:'Snake'},
+  {file:'breakout.html',name:'Breakout'},
+  {file:'newgame.html',name:'New Game'}
+];
+
+const container=document.getElementById('gamesContainer');
+const gameArea=document.getElementById('gameArea');
+const gameViewer=document.getElementById('gameViewer');
+const gameTitle=document.getElementById('gameTitleBar');
+const fullscreenBtn=document.getElementById('fullscreenBtn');
+const reloadBtn=document.getElementById('reloadBtn');
+const closeBtn=document.getElementById('closeBtn');
+
+games.forEach(game=>{
+  const a=document.createElement('a');
+  a.href="#";
+  a.className='game-card';
+  const img=document.createElement('img');
+  img.src=`logos/${game.file.replace('.html','.png')}`;
+  img.alt=game.name;
+  img.className='game-logo';
+  const title=document.createElement('div');
+  title.className='game-title';
+  title.textContent=game.name;
+  a.appendChild(img);
+  a.appendChild(title);
+  container.appendChild(a);
+
+  a.addEventListener('click',(e)=>{
+    e.preventDefault();
+    gameViewer.src=`games/${game.file}`;
+    gameTitle.textContent=game.name;
+    gameArea.style.display='flex';
+    gameArea.scrollIntoView({behavior:'smooth'});
+  });
+});
+
+fullscreenBtn.addEventListener('click',()=>{
+  if(!document.fullscreenElement){
+    gameArea.requestFullscreen?.();
+  }else{
+    document.exitFullscreen?.();
+  }
+});
+
+reloadBtn.addEventListener('click',()=>{gameViewer.src=gameViewer.src;});
+closeBtn.addEventListener('click',()=>{
+  gameViewer.src='';
+  gameArea.style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+</script>
+
 </body>
 </html>
