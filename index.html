@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline Game Center</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      background: radial-gradient(circle at top, #242424, #121212);
+      color: #fff;
+      font-family: "Segoe UI", sans-serif;
+      text-align: center;
+      padding-top: 20vh;
+    }
+    h1 { font-size: 2.5em; margin-bottom: .3em; }
+    p  { color: #bbb; margin-bottom: 1em; }
+    button {
+      padding: 10px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #3a3a3a;
+      color: #fff;
+      cursor: pointer;
+      transition: background .3s;
+    }
+    button:hover { background: #505050; }
+  </style>
+</head>
+<body>
+  <h1>🎮 Offline Game Center</h1>
+  <p id="status">checking cache...</p>
+  <button onclick="window.location='games.html'">play now (online)</button>
+
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => {
+        document.getElementById('status').innerText =
+          '✅ cached! you can now go offline and refresh to play.';
+      })
+      .catch(() => {
+        document.getElementById('status').innerText =
+          '❌ service worker failed to load.';
+      });
+  }
+  </script>
+</body>
+</html>
