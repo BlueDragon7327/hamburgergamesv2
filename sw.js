@@ -3,8 +3,7 @@ const URLS_TO_CACHE = [
   './',
   './index.html',
   './games.html',
-  './games/cubedodge.html',
-  './games/style.css'
+  './games/poorbunny.html'
 ];
 
 self.addEventListener('install', e => {
@@ -19,3 +18,4 @@ self.addEventListener('fetch', e => {
     caches.match(e.request).then(r => r || fetch(e.request))
   );
 });
+
