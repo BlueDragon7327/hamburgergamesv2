@@ -1,5 +1,5 @@
 # 👻 Phantom v3 🎃
-### yet another vulnerability has been found in the extension Securly, and since it is Halloween season, why not recode Phantom, eh?
+### yet another vulnerability has been found in the extension Securly, and since I don't really need this anymore, and Phantom hasn't been updated in ages, why not recode Phantom, eh?
 
 this bypass is kind of a combination of Phantom v2, WINE, and even Hamburger Games. where it takes advantage of the fact Securly relies on you being connected to internet to see your screen.
 
